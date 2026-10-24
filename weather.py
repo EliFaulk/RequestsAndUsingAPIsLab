@@ -71,5 +71,6 @@ forecast = response.json()
 print(forecast)
 
 print("""
-conditions: {forecast["daily"]}
+Conditions: {forecast["daily"]}
+High: 
 """)
