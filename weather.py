@@ -58,7 +58,7 @@ while True:
     if city in cities:
         break;
     print("Invalid city.")
-date = input("Enter a date: ")
+date = input("Enter a date (YYYY-MM-DD): ")
 print("------------------------------------------------")
 
 latitude = cities[city]["latitude"]
@@ -66,11 +66,14 @@ longitude = cities[city]["longitude"]
 
 
 # Get request to weather API
-response = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&start_date={date}&end_date={date}&daily=weather_code&daily=apparent_temperature_max&daily=apparent_temperature_min&daily=precipitation_sum&daily=wind_speed_10m_max")
+response = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&start_date={date}&end_date={date}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch")
 forecast = response.json()
-print(forecast)
 
-print("""
-Conditions: {forecast["daily"]}
-High: 
+# Format and print
+print(f"""
+Conditions: {weather_codes[f"{forecast["daily"]["weather_code"][0]}"]}
+High: {forecast["daily"]["temperature_2m_max"][0]} degrees Fahrenheit
+Low: {forecast["daily"]["temperature_2m_min"][0]} degrees Fahrenheit
+Precipitation: {forecast["daily"]["precipitation_sum"][0]} in
+Max Wind: {forecast["daily"]["wind_speed_10m_max"][0]} mph
 """)
