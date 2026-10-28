@@ -1,10 +1,23 @@
 import sys
 import os
 import pygame
+import requests
 
+def load_image():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
+
+    API_KEY = os.environ.get("NASA_API_KEY")
+
+    response = requests.get(f"https://science.nasa.gov/wp-json/wp/v2/apod-basic/?{API_KEY}")
+    stuff = response.json()
+    print(stuff[0]["title"])
 
 def main():
-    response = requests.get("https://science.nasa.gov/wp-json/wp/v2/apod-basic/?api_key=DEMO_KEY")
+    load_image()
 
     # Load images.jpeg from the same directory as this script
     base_dir = os.path.dirname(os.path.abspath(__file__))
