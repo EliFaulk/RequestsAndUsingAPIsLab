@@ -14,14 +14,21 @@ def load_image():
 
     response = requests.get(f"https://science.nasa.gov/wp-json/wp/v2/apod-basic/?{API_KEY}")
     stuff = response.json()
-    print(stuff[0]["title"])
+    image_response = requests.get(stuff[0]["hdurl"])
+    if image_response.status_code == 200:
+        with open("apod.jpg", "wb") as file:
+            file.write(image_response.content)
+        print("APOD downloaded!")
+    else:
+        print("APOD failed to download.")
+    
 
 def main():
     load_image()
 
     # Load images.jpeg from the same directory as this script
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    image_path = os.path.join(base_dir, "image.jpeg")
+    image_path = os.path.join(base_dir, "apod.jpg")
 
     pygame.init()
 
